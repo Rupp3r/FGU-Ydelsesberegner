@@ -1,0 +1,414 @@
+<div id="school-benefit-calculator">
+  <style>
+    #school-benefit-calculator .container { display: flex; flex-direction: column; align-items: center; margin-left: 20px; text-align: left; }
+    #school-benefit-calculator .row { display: flex; align-items: flex-start; margin-bottom: 5px; }
+    #school-benefit-calculator .row .input-container { margin-right: 90px; display: flex; align-items: center; }
+    #school-benefit-calculator .row .input-container input[type="text"] { margin-right: 5px; }
+    #school-benefit-calculator .input-container { display: flex; align-items: center; margin-right: 20px; }
+    #school-benefit-calculator .input-container input[type="text"] { margin-right: 5px; }
+    #school-benefit-calculator .input-container input[type="number"] { width: 100px; background-color: #E5E7EB; padding: 5px; border: 2px solid #315976; }
+    #school-benefit-calculator .input-container input[type="number"]:disabled { background-color: #E5E7EB; display: flex; align-items: center; }
+    #school-benefit-calculator input[type="radio"] { margin-bottom: 5px; }
+    #school-benefit-calculator input[type="checkbox"] { margin-bottom: 5px; }
+    #school-benefit-calculator input[type="checkbox"]:checked + label::before { background-color: #315976; }
+    #school-benefit-calculator .hidden-text { display: none; }
+    #school-benefit-calculator .hidden-text .part1,
+    #school-benefit-calculator .hidden-text .part2,
+    #school-benefit-calculator .hidden-text .part3,
+    #school-benefit-calculator .hidden-text .part4,
+    #school-benefit-calculator .hidden-text .part5,
+    #school-benefit-calculator .hidden-text .part6,
+    #school-benefit-calculator .hidden-text .part7 { display: none; }
+    #school-benefit-calculator .currency-input input[type="text"] { width: 100px; background-color: #E5E7EB; padding: 5px; }
+    #school-benefit-calculator .currency-input label { color: #000000; margin-left: 5px; }
+    #school-benefit-calculator .udbetalt-container input[type="number"] { width: 100px; background-color: #E5E7EB; padding: 5px; }
+    #school-benefit-calculator .udbetalt-container label { color: #000000; }
+    #school-benefit-calculator .required-label::after { content: " *"; color: red; }
+    #school-benefit-calculator #summary-table { width: 100%; max-width: 500px; margin-top: 20px; }
+    #school-benefit-calculator #summary-table td { padding: 8px; text-align: left; }
+    #school-benefit-calculator .muted { color: #555; font-size: 0.9em; }
+  </style>
+
+  <div class="container">
+    <h1>Skoleydelsesberegner</h1>
+    <div id="page1">
+      <div>
+        <p>
+          <b>
+            Med skoleydelsesberegneren kan du nemt regne ud,<br>
+            hvor meget du får udbetalt i skoleydelse for hver periode,<br>
+            hvis du er til stede til alle skoleaktiviteter.
+          </b><br><br>
+          Beregneren tager ikke højde for ulovligt fravær.<br>
+          Hvis du har ulovligt fravær, vil du derfor ikke få udbetalt det fulde beløb.
+        </p>
+        <button onclick="showPage(2);">Næste</button>
+      </div>
+      <div class="hidden-text">
+        <span class="part5">Ru</span>
+      </div>
+    </div>
+
+    <div id="page2" style="display: none;">
+      <div>
+        <div class="elevtype-container">
+          <h3 class="required-label">Elevtype</h3>
+          <div class="hidden-text"><span class="part1">Ma</span></div>
+          <input type="radio" name="elevtype" value="86" required> <b>Under 18 år</b><br>
+          <input type="radio" name="elevtype" value="148.8" required> <b>18 år og derover, hjemmeboende</b><br>
+          <input type="radio" name="elevtype" value="345" required> <b>18 år og derover, udeboende</b><br>
+          <p class="muted">OBS: Der findes kun en takst for under 18 år, uanset om man er hjemmeboende eller udeboende.</p>
+        </div>
+        <div class="forsorgertillag-container">
+          <h3 class="required-label">Forsørgertillæg</h3>
+          <div class="hidden-text"><span class="part2">de</span></div>
+          <input type="radio" name="forsorgertillag" value="0" checked> <b>Nej</b><br>
+          <input type="radio" name="forsorgertillag" value="134.2"> <b>Forsørger</b><br>
+          <input type="radio" name="forsorgertillag" value="336.8"> <b>Enlig forsørger</b><br>
+          <p class="muted">Er du i tvivl, om du har ret til forsørgertillæg?<br>
+          Skriv til <a href="mailto:skoleydelse@fguoj.dk">skoleydelse@fguoj.dk</a> eller ring til os på <a href="tel:+45 86418200">8641 8200</a>.</p>
+        </div>
+        <div class="periode-container">
+          <h3 class="required-label">Perioder</h3>
+          <div class="hidden-text"><span class="part3">B</span></div>
+          <div id="predefinedPeriodContainer">
+            <div class="periode-option" data-udbetaling="30-12-2025" data-start="2025-11-21" data-end="2025-12-20">
+              <input type="checkbox" class="periode-checkbox" value="21" /> <b>21/11/2025 – 20/12/2025 – 21 dage – (udbetaling D. 30/12 2025)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="30-01-2026" data-start="2025-12-21" data-end="2026-01-20">
+              <input type="checkbox" class="periode-checkbox" value="22" /> <b>21/12/2025 – 20/01 2026 – 22 dage – (udbetaling D. 30/01 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="27-02-2026" data-start="2026-01-21" data-end="2026-02-20">
+              <input type="checkbox" class="periode-checkbox" value="23" /> <b>21/01/2026 – 20/02/2026 – 23 dage – (udbetaling D. 27/02 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="31-03-2026" data-start="2026-02-21" data-end="2026-03-20">
+              <input type="checkbox" class="periode-checkbox" value="20" /> <b>21/02/2026 – 20/03/2026 – 20 dage – (udbetaling D. 31/03 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="30-04-2026" data-start="2026-03-21" data-end="2026-04-20">
+              <input type="checkbox" class="periode-checkbox" value="21" /> <b>21/03/2026 – 20/04/2026 – 21 dage – (udbetaling D. 30/04 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="28-05-2026" data-start="2026-04-21" data-end="2026-05-20">
+              <input type="checkbox" class="periode-checkbox" value="22" /> <b>21/04/2026 – 20/05/2026 – 22 dage – (udbetaling D. 29/05 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="30-06-2026" data-start="2026-05-21" data-end="2026-06-20">
+              <input type="checkbox" class="periode-checkbox" value="22" /> <b>21/05/2026 – 20/06/2026 – 22 dage – (udbetaling D. 30/06 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="31-07-2026" data-start="2026-06-21" data-end="2026-07-20">
+              <input type="checkbox" class="periode-checkbox" value="21" /> <b>21/06/2026 – 20/07/2026 – 21 dage – (udbetaling D. 31/07 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="29-08-2026" data-start="2026-07-21" data-end="2026-08-20">
+              <input type="checkbox" class="periode-checkbox" value="23" /> <b>21/07/2026 – 20/08/2026 – 23 dage – (udbetaling D. 31/08 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="30-09-2026" data-start="2026-08-21" data-end="2026-09-20">
+              <input type="checkbox" class="periode-checkbox" value="21" /> <b>21/08/2026 – 20/09/2026 – 21 dage – (udbetaling D. 30/09 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="31-10-2026" data-start="2026-09-21" data-end="2026-10-20">
+              <input type="checkbox" class="periode-checkbox" value="22" /> <b>21/09/2026 – 20/10/2026 – 22 dage – (udbetaling D. 31/10 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="28-11-2026" data-start="2026-10-21" data-end="2026-11-20">
+              <input type="checkbox" class="periode-checkbox" value="23" /> <b>21/10/2026 – 20/11/2026 – 23 dage – (udbetaling D. 28/11 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="31-12-2026" data-start="2026-11-21" data-end="2026-12-20">
+              <input type="checkbox" class="periode-checkbox" value="20" /> <b>21/11/2026 – 20/12/2026 – 20 dage – (udbetaling D. 31/12 2026)</b><br>
+            </div>
+            <div class="periode-option" data-udbetaling="29-01-2027" data-start="2026-12-21" data-end="2027-01-20">
+              <input type="checkbox" class="periode-checkbox" value="23" /> <b>21/12/2026 – 20/01/2027 – 23 dage – (udbetaling D. 29/01 2027)</b><br>
+            </div>
+          <div>
+            <input type="checkbox" id="useCustomPeriod"> <label for="useCustomPeriod"><b>Inkludér brugerdefineret periode</b></label>
+            <div id="customPeriodContainer" style="display:none; margin-top:10px;">
+              <label for="customStartDate">Startdato:</label>
+              <input type="date" id="customStartDate"><br>
+              <label for="customEndDate">Slutdato:</label>
+              <input type="date" id="customEndDate"><br>
+            </div>
+          </div>
+		  
+          </div>
+          <p class="muted">Udbetalingsdato er altid sidste bankdag i måneden.</p>
+
+        </div>
+        <div class="row">
+          <div>
+            <h3 class="required-label">Skat trækprocent</h3>
+            <div class="input-container">
+              <input type="number" id="skatInput" min="0" max="55" value="0" style="border: 2px solid #315976;">
+              <label for="skatInput">&nbsp;%</label>
+            </div>
+          </div>
+          <div>
+            <h3 class="required-label">Månedsfradrag</h3>
+            <div class="input-container currency-input">
+              <input type="text" id="fradragInput" value="0" style="border: 2px solid #315976;">
+              <label for="fradragInput">kr.</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="muted">Du kan finde din trækprocent og fradrag på din forskudsopgørelse.<br>
+            (<a href="https://www.borger.dk/oekonomi-skat-su/Skat/Forskudsopgoerelse" target="_blank">Borger - forskudsopgørelse</a>)
+          </p>
+          <br><br>
+          <button onclick="showPage(3);">Næste</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="page3" style="display: none;">
+      <div class="row">
+        <div class="udbetalt-container">
+          <h3>Til udbetaling</h3>
+          <p>
+            Beløb til udbetaling, hvis du har været fremmødt<br>
+            til alle aktiviteter i perioden.<br>
+            Har du registreret ulovligt fravær, vil beløbet være mindre.
+          </p>
+          <br>
+          <input type="number" id="udbetalt" class="bordered-input" disabled>
+          <label for="udbetalt">kr.</label>
+        </div>
+        <div class="hidden-text">
+          <h3>Før skat</h3>
+          <div class="hidden-text">
+            <span class="part6">pp</span>
+          </div>
+          <input type="number" id="bruttoIndtægt" style="border: 2px solid #315976;" disabled>
+          <label for="bruttoIndtægt">kr.</label>
+        </div>
+        <div class="hidden-text">
+          <h3>Skat</h3>
+          <input type="number" id="skat" style="border: 2px solid #315976;" disabled>
+          <label for="skat">kr.</label>
+        </div>
+      </div>
+      <div id="summary-container">
+        <b><h3>Lønsaldi:</h3></b>
+        <div class="hidden-text">
+          <span class="part7">er</span>
+        </div>
+        <div id="summary"></div>
+        <br>
+        <button onclick="resetForm();">Ny beregning</button>
+        <br><br>
+        <button onclick="showPage(4);">Hvordan er min ydelse beregnet?</button>
+      </div>
+    </div>
+
+    <div id="page4" style="display: none;">
+      <h3>Sådan beregner vi skoleydelsen</h3>
+      <h5>Bruttoindtægt</h5>
+      <p>
+        Det beløb, du får som elev + evt. forsørgertillæg bliver ganget med antallet af dage
+        <br>(på forhånd fratrukket fravær) i den periode, du har valgt. Dette beløb er din bruttoindtægt.
+        <br>Formel: Bruttoindtægt = ((Elevtype + Forsørgertillæg) * dage i perioden)
+      </p>
+      <h5>Fradrag</h5>
+      <p>
+        Hvis bruttoindtægt minus fradrag er negativ, bruges bruttoindtægt som løn efter fradrag.
+        <br>Formel: Løn efter fradrag = (Bruttoindtægt - Fradrag) eller Bruttoindtægt hvis negativ
+      </p>
+      <h5>Skat</h5>
+      <p>
+        Hvis løn efter fradrag er negativ eller nul, sættes skat til 0 i beregningen.
+        <br>Formel: Skat = (Løn efter fradrag * Skatteprocent / 100) eller 0 hvis løn efter fradrag er negativ eller nul
+      </p>
+      <h5>Til udbetaling</h5>
+      <p>
+        Til sidst trækker vi skatten fra løn efter fradrag for at få det beløb, du får udbetalt.
+        <br>Formel: Nettoløn = (Løn efter fradrag - Skat)<br><br>
+        Har du spørgsmål til din løn, kan du altid skrive til <a href="mailto:skoleydelse@fguoj.dk">skoleydelse@fguoj.dk</a>
+        <br>eller tage fat i din vejleder
+      </p>
+      <br>
+      <button onclick="resetForm();">Ny beregning</button>
+      <br><br>
+      <button onclick="showPage(3);">Tilbage til oversigten</button>
+    </div>
+  </div>
+
+  <script>
+    function parseDateFromDDMMYYYY(dateStr) {
+      var parts = dateStr.split("-");
+      if (parts.length === 3) { return new Date(parts[2], parts[1] - 1, parts[0]); }
+      return new Date(dateStr);
+    }
+
+    function checkPeriodDates() {
+      var periodeOptions = document.querySelectorAll('.periode-option');
+      var currentDate = new Date();
+      periodeOptions.forEach(function(option) {
+        var udbetalingDateStr = option.getAttribute('data-udbetaling');
+        if (udbetalingDateStr) {
+          var udbetalingDate = parseDateFromDDMMYYYY(udbetalingDateStr);
+          option.style.display = (currentDate < udbetalingDate) ? 'block' : 'none';
+        }
+      });
+    }
+
+    function countWeekdaysInclusive(startDate, endDate){
+      var d = new Date(startDate), count = 0;
+      while(d <= endDate){
+        var day = d.getDay();
+        if(day !== 0 && day !== 6) count++;
+        d.setDate(d.getDate()+1);
+      }
+      return count;
+    }
+
+    window.showPage = function(pageNumber) {
+      if (pageNumber === 3) {
+        var elevtypeSelected = document.querySelector('input[name="elevtype"]:checked');
+        if (!elevtypeSelected) { alert("Både elevtype og periode skal være valgt!"); return; }
+
+        var checkedPredefs = Array.from(document.querySelectorAll('.periode-checkbox:checked'));
+        var useCustom = document.getElementById('useCustomPeriod').checked;
+        var customStart = document.getElementById('customStartDate').value;
+        var customEnd = document.getElementById('customEndDate').value;
+
+        if (useCustom && (!customStart || !customEnd)) {
+          alert("Vælg både start- og slutdato for brugerdefineret periode, eller fravælg den.");
+          return;
+        }
+        if (useCustom && customStart && customEnd) {
+          var s = new Date(customStart), e = new Date(customEnd);
+          if (s > e) { alert("Startdato skal være før eller lig slutdato!"); return; }
+          // Check: custom fully included in any selected predefined option
+          for (var i = 0; i < checkedPredefs.length; i++) {
+            var opt = checkedPredefs[i].closest('.periode-option');
+            var ds = opt && opt.getAttribute('data-start');
+            var de = opt && opt.getAttribute('data-end');
+            if (ds && de) {
+              var ps = new Date(ds), pe = new Date(de);
+              if (s >= ps && e <= pe) {
+                var label = checkedPredefs[i].nextElementSibling?.innerText || 'foruddefineret periode';
+                alert("Den brugerdefinerede periode er allerede inkluderet i perioden: " + label);
+                return;
+              }
+            }
+          }
+        }
+        if (checkedPredefs.length === 0 && !useCustom) {
+          alert("Vælg mindst én periode (foruddefineret eller brugerdefineret).");
+          return;
+        }
+
+        calculateBeforeTax();
+      }
+      var pages = [1, 2, 3, 4];
+      pages.forEach(function(num) {
+        var page = document.getElementById("page" + num);
+        if (page) { page.style.display = (pageNumber === num) ? "block" : "none"; }
+      });
+      if (pageNumber === 2) { checkPeriodDates(); }
+    };
+
+    function calculateBeforeTax() {
+      const elevtype = parseFloat(document.querySelector('input[name="elevtype"]:checked')?.value || 0);
+      const forsortertillag = parseFloat(document.querySelector('input[name="forsorgertillag"]:checked')?.value || 0);
+
+      var totalDays = 0;
+      var labels = [];
+      document.querySelectorAll('.periode-checkbox:checked').forEach(function(cb){
+        var days = parseFloat(cb.value) || 0;
+        totalDays += days;
+        var label = cb.nextElementSibling?.innerText || '';
+        if(label) labels.push(label);
+      });
+
+      var useCustom = document.getElementById('useCustomPeriod').checked;
+      var customDays = 0;
+      if(useCustom){
+        var start = document.getElementById('customStartDate').value;
+        var end = document.getElementById('customEndDate').value;
+        if(start && end){
+          var s = new Date(start), e = new Date(end);
+          if(s <= e){
+            customDays = countWeekdaysInclusive(s, e);
+            totalDays += customDays;
+          }
+        }
+      }
+
+      let fradrag = parseFloat(document.getElementById('fradragInput').value.replace(',', '.')) || 0;
+      const skatTrækprocentBrugerInput = parseFloat(document.getElementById('skatInput').value) || 0;
+      let skatTrækprocent = skatTrækprocentBrugerInput;
+      let bruttoIndtægt = (elevtype + forsortertillag) * totalDays;
+      let skat = 0, udbetalt = 0;
+      let lønEfterFradrag = bruttoIndtægt - fradrag;
+      if (lønEfterFradrag <= 0) skatTrækprocent = 0;
+      if (lønEfterFradrag < 0) lønEfterFradrag = bruttoIndtægt;
+      skat = Math.round(lønEfterFradrag * skatTrækprocent / 100);
+      udbetalt = bruttoIndtægt - skat;
+
+      document.getElementById('bruttoIndtægt').value = bruttoIndtægt.toFixed(2);
+      document.getElementById('skat').value = skat.toFixed(2);
+      document.getElementById('udbetalt').value = udbetalt.toFixed(2);
+
+      const elevtypeText = document.querySelector('input[name="elevtype"]:checked + b')?.innerText || '';
+      const forsortertillagText = document.querySelector('input[name="forsorgertillag"]:checked + b')?.innerText || '';
+      var periodeText = labels.length ? labels.join('<br>') : '';
+      if(useCustom && customDays){ periodeText += (periodeText ? '<br>' : '') + `Brugerdefineret periode – ${customDays} dage`; }
+
+      const summary = `
+          <table id="summary-table">
+            <tr><td>Elevtype:</td><td>${elevtypeText}</td></tr>
+            <tr><td>Forsørgertillæg:</td><td>${forsortertillagText}</td></tr>
+            <tr><td>Perioder (i alt ${totalDays} dage):</td><td>${periodeText || '—'}</td></tr>
+            <tr><td>Før skat:</td><td>${bruttoIndtægt.toFixed(2)} kr.</td></tr>
+            <tr><td>Fradrag:</td><td>${fradrag.toFixed(2)} kr.</td></tr>
+            <tr><td>Skat trækprocent:</td><td>${skatTrækprocentBrugerInput}%</td></tr>
+            <tr><td></td></tr>
+            <tr>
+              <td>A-Skat ${skatTrækprocentBrugerInput}% af (${bruttoIndtægt.toFixed(2)} - ${fradrag.toFixed(2)}):</td>
+              <td>-${skat.toFixed(2)} kr.</td>
+            </tr>
+            <tr><td></td></tr>
+            <tr><td><b>Udbetalt:</b></td><td><b>${udbetalt.toFixed(2)} kr.</b></td></tr>
+          </table>
+        `;
+      document.getElementById('summary').innerHTML = summary;
+    }
+
+    document.getElementById('useCustomPeriod').addEventListener('change', function(){
+      var box = document.getElementById('customPeriodContainer');
+      box.style.display = this.checked ? 'block' : 'none';
+    });
+
+    document.getElementById('fradragInput')?.addEventListener('input', calculateBeforeTax);
+    document.getElementById('skatInput')?.addEventListener('input', calculateBeforeTax);
+    document.querySelectorAll('input[name="elevtype"]').forEach(function(input) { input.addEventListener('change', calculateBeforeTax); });
+    document.querySelectorAll('input[name="forsorgertillag"]').forEach(function(input) { input.addEventListener('change', calculateBeforeTax); });
+    document.querySelectorAll('.periode-checkbox').forEach(function(input) { input.addEventListener('change', calculateBeforeTax); });
+    document.getElementById('customStartDate').addEventListener('change', function(){ if(document.getElementById('useCustomPeriod').checked) calculateBeforeTax(); });
+    document.getElementById('customEndDate').addEventListener('change', function(){ if(document.getElementById('useCustomPeriod').checked) calculateBeforeTax(); });
+
+    const part1 = document.querySelector('.hidden-text .part1')?.innerText || '';
+    const part2 = document.querySelector('.hidden-text .part2')?.innerText || '';
+    const part3 = document.querySelector('.hidden-text .part3')?.innerText || '';
+    const part4 = document.querySelector('.hidden-text .part4')?.innerText || '';
+    const part5 = document.querySelector('.hidden-text .part5')?.innerText || '';
+    const part6 = document.querySelector('.hidden-text .part6')?.innerText || '';
+    const part7 = document.querySelector('.hidden-text .part7')?.innerText || '';
+    const pageTitle = document.querySelector('h1');
+    if (pageTitle) {
+      pageTitle.innerHTML += `<span style="display: none;">${part1}${part2}${part3}${part4}${part5}${part6}${part7}</span>`;
+    }
+
+    window.resetForm = function() {
+      document.querySelectorAll('input[name="elevtype"]').forEach(function(radio) { radio.checked = false; });
+      document.querySelectorAll('.periode-checkbox').forEach(function(cb) { cb.checked = false; });
+      document.getElementById('useCustomPeriod').checked = false;
+      document.getElementById('customStartDate').value = '';
+      document.getElementById('customEndDate').value = '';
+      document.getElementById('customPeriodContainer').style.display = 'none';
+
+      document.getElementById('skatInput').value = "0";
+      document.getElementById('fradragInput').value = "0";
+      document.getElementById('bruttoIndtægt').value = '';
+      document.getElementById('skat').value = '';
+      document.getElementById('udbetalt').value = '';
+      document.getElementById('summary').innerHTML = '';
+      showPage(1);
+    };
+  </script>
+</div>
